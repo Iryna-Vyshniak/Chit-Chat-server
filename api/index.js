@@ -4,16 +4,16 @@ import cookieParser from 'cookie-parser';
 import { v2 as cloudinary } from 'cloudinary';
 import cors from "cors";
 
-
 import { app, server } from '../socket/socket.js';
 import connectToMongoDB from '../db/connectToMongoDB.js';
 
+import globalErrorHandler from '../middlewares/globalErrorHandler.js';
+import missingRouteHandler from '../middlewares/missingRouteHandler.js';
 
-
+import authRouter from '../routes/api/auth.routes.js';
+import usersRouter from '../routes/api/user.routes.js';
 
 dotenv.config();
-
-
 
 const PORT = process.env.PORT || 3000;
 
@@ -39,8 +39,6 @@ const corsOptions = {
 
 // Apply the CORS middleware to all HTTP routes
 app.use(cors(corsOptions));
-
-
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -77,6 +75,14 @@ app.use('/api/test', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+app.use("/api/auth", authRouter);
+
+app.use("/api/users", usersRouter);
+
+
+app.use(missingRouteHandler);
+app.use(globalErrorHandler);
 
   
 server.listen(PORT, () => {
