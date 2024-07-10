@@ -31,17 +31,18 @@ const signin = ctrlWrapper(async (req, res) => {
 
   res.status(200).json({
     data: {
-        user: {
-            _id: user._id,
-            fullName: user.fullName,
-            username: user.username,
-            avatar: user.avatar,
-            email: user.email,
-            gender: user.gender,
-            phone: user.phone,
-            birthday: user.birthday,
-          },
-    }
+      user: {
+        _id: user._id,
+        fullName: user.fullName,
+        username: user.username,
+        avatar: user.avatar,
+        email: user.email,
+        gender: user.gender,
+        phone: user.phone,
+        birthday: user.birthday,
+        createdAt: user.createdAt,
+      },
+    },
   });
 });
 
