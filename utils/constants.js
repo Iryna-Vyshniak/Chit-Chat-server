@@ -23,6 +23,14 @@ const TAGS_ENUM = [
   'events',
   'science',
   'technology',
+  'humanitarianAid',
+  'mission',
+  'peace',
+  'life',
+  'savingLives',
+  'work',
+  'psychology',
+  'kids',
 ];
 
 export {
