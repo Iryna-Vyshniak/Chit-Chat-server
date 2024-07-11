@@ -28,11 +28,11 @@ const postSchema = new Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'user',
+      ref: 'User',
       required: true,
     },
     likedBy: {
-      type: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+      type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
       default: [],
     },
   },
@@ -41,6 +41,6 @@ const postSchema = new Schema(
 
 postSchema.post('save', handleMongooseError);
 
-const Post = model('post', postSchema);
+const Post = model('Post', postSchema);
 
 export default Post;

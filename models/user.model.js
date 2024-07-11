@@ -54,7 +54,7 @@ const userSchema = new Schema(
     posts: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'post',
+        ref: 'Post',
       },
     ],
   },
