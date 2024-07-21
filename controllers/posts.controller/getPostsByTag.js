@@ -13,7 +13,9 @@ const getPostsByTag = ctrlWrapper(async (req, res) => {
 
   const { tag } = req.params;
 
-  const posts = await Post.find({ tags: { $in: [tag] } }, '', { skip, limit }).sort('createdAt');
+  const posts = await Post.find({ tags: { $in: [tag] } }, '', { skip, limit })
+    .sort('createdAt')
+    .populate('owner', '_id username fullName avatar');
 
   if (!posts.length) {
     throw HttpError(404, 'No posts found with the specified tag');
@@ -22,11 +24,13 @@ const getPostsByTag = ctrlWrapper(async (req, res) => {
   const totalPosts = await Post.countDocuments({ tags: { $in: [tag] } });
 
   res.json({
-    posts,
-    totalPosts,
-    totalPages: Math.ceil(totalPosts / limit),
-    currentPage: page,
-    limit,
+    data: {
+      posts,
+      totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page,
+      limit,
+    },
   });
 });
 
