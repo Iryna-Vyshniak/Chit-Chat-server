@@ -18,7 +18,11 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
-const allowedOrigins = ['https://chit-chat-client-ivn.vercel.app', 'http://localhost:8100'];
+const allowedOrigins = [
+  'https://chit-chat-client-ivn.vercel.app',
+  'http://localhost:8100',
+  'http://localhost:5173',
+];
 
 // CORS configuration for HTTP routes
 const corsOptions = {
@@ -33,6 +37,7 @@ const corsOptions = {
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-CSRF-Token'],
   exposedHeaders: ['set-cookie'],
+  optionsSuccessStatus: 200,
 };
 
 // Apply the CORS middleware to all HTTP routes
