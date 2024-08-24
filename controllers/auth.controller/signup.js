@@ -2,8 +2,8 @@ import bcrypt from 'bcryptjs';
 
 import User from '../../models/user.model.js';
 
-import HttpError  from '../../helpers/HttpError.js';
-import ctrlWrapper  from '../../decorators/controllerWrapper.js';
+import HttpError from '../../helpers/HttpError.js';
+import ctrlWrapper from '../../decorators/controllerWrapper.js';
 import generateTokenAndSetCookie from '../../utils/generateToken.js';
 import connectToMongoDB from '../../db/connectToMongoDB.js';
 
@@ -29,37 +29,36 @@ const signup = ctrlWrapper(async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
 
-  //   avatar
+  //   avatar and cover
   const manAvatar =
     'https://res.cloudinary.com/dkqxaid79/image/upload/v1711450156/rewievs/man-emoji.png';
   const womanAvatar =
     'https://res.cloudinary.com/dkqxaid79/image/upload/v1711450156/rewievs/female-emoji.png';
+  const userCover =
+    'https://res.cloudinary.com/dkqxaid79/image/upload/v1724506911/chat/cover-profile.jpg';
 
-  const newUser = await User.create({
+  // Create new user
+  let newUser = await User.create({
     ...req.body,
     password: hashPassword,
-    avatar: gender === 'female' ? womanAvatar : manAvatar, 
+    avatar: gender === 'female' ? womanAvatar : manAvatar,
+    cover: userCover,
   });
-  
+
   if (!newUser) {
-    throw HttpError(400, 'Invalid user data');
+    res.status(400).json({ error: 'Invalid user data' });
+  } else {
+    // Generate token and set cookies
+    generateTokenAndSetCookie(newUser._id, res);
+
+    // Remove password from the user object before sending the response
+    newUser.password = null;
+    res.status(201).json({
+      data: {
+        user: newUser, // Return the full user object
+      },
+    });
   }
-
-  // generate token and set cookies
-  generateTokenAndSetCookie(newUser._id, res);
-
-  res.status(201).json({
-    data: {
-      user: {
-        _id: newUser._id,
-        fullName: newUser.fullName,
-        username: newUser.username,
-        avatar: newUser.avatar,
-        email: newUser.email,
-        gender: newUser.gender,
-      }
-    }
-  });
 });
 
 export default signup;
