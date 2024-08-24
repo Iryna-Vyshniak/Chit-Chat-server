@@ -19,7 +19,8 @@ const signin = ctrlWrapper(async (req, res) => {
     throw new HttpError(400, 'Email and password are required');
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).select('+password');
+  // We use select('+password') to explicitly include the password field when searching for a user. This is necessary because by default, if the schema has a select: false option for the password, it will not be loaded.
 
   const isCorrectPassword = await bcrypt.compare(password, user?.password || '');
 
@@ -29,20 +30,11 @@ const signin = ctrlWrapper(async (req, res) => {
 
   generateTokenAndSetCookie(user._id, res);
 
+  // remove the password from the object before sending it back. This does not change the data in the database, but only excludes the password from the object passed to the client.
+  user.password = null;
+
   res.status(200).json({
-    data: {
-      user: {
-        _id: user._id,
-        fullName: user.fullName,
-        username: user.username,
-        avatar: user.avatar,
-        email: user.email,
-        gender: user.gender,
-        phone: user.phone,
-        birthday: user.birthday,
-        createdAt: user.createdAt,
-      },
-    },
+    data: { user },
   });
 });
 
