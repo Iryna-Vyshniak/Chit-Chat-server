@@ -5,8 +5,10 @@ const length = (lgth) => [lgth, `Must be ${lgth} characters or more`];
 const emailRegex = [regExp.email, 'Invalid email'];
 const genderEnum = ['male', 'female', 'other'];
 const defaultAvatar = '';
+const defaultCover = '';
 const defaultPhone = '';
 const defaultBirthday = '';
+const defaultBio = '';
 
 const TAGS_ENUM = [
   'culture',
@@ -39,7 +41,9 @@ export {
   emailRegex,
   genderEnum,
   defaultAvatar,
+  defaultCover,
   defaultPhone,
   defaultBirthday,
+  defaultBio,
   TAGS_ENUM,
 };

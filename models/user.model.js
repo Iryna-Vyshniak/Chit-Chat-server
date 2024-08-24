@@ -8,8 +8,10 @@ import {
   length,
   emailRegex,
   defaultAvatar,
+  defaultCover,
   defaultPhone,
   defaultBirthday,
+  defaultBio,
 } from '../utils/constants.js';
 
 const userSchema = new Schema(
@@ -43,6 +45,10 @@ const userSchema = new Schema(
       type: String,
       default: defaultAvatar,
     },
+    cover: {
+      type: String,
+      default: defaultCover,
+    },
     phone: {
       type: String,
       default: defaultPhone,
@@ -50,6 +56,10 @@ const userSchema = new Schema(
     birthday: {
       type: String,
       default: defaultBirthday,
+    },
+    bio: {
+      type: String,
+      default: defaultBio,
     },
     posts: [
       {
