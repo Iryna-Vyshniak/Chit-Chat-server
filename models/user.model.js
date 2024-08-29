@@ -79,6 +79,18 @@ const userSchema = new Schema(
         ref: 'Comment',
       },
     ],
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    followings: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   { versionKey: false, timestamps: true }
 );
