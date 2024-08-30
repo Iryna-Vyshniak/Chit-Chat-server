@@ -11,17 +11,22 @@ const getUsers = ctrlWrapper(async (req, res) => {
 
   const loggedInUserId = req.user._id;
 
-  // find all users but don`t find user who is logged in and can see all users (conversations) on sidebar because we don`t want to send message to us
-  const allFilteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select('-password');
+  // find all users and filter out the logged-in user
+  const allUsers = await User.find().select('-password');
 
-  if (!allFilteredUsers.length) {
+  if (!allUsers.length) {
     return res.status(200).json({
       message: 'There are no users yet',
       users: [],
     });
   }
 
-  res.status(200).json({ data: { users: allFilteredUsers } });
+  // filter out the logged-in user
+  const filteredUsers = allUsers.filter(
+    (user) => user._id.toString() !== loggedInUserId.toString()
+  );
+
+  res.status(200).json({ data: { filteredUsers, allUsers } });
 });
 
 export default getUsers;
